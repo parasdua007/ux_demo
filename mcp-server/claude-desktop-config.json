@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "mcp-server": {
+      "command": "node",
+      "args": ["advanced-example.js"],
+      "cwd": "/workspace/mcp-server",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  }
+}
