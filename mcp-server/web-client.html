@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Web Client</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .tool-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background-color: #fafafa;
+        }
+        .tool-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        .tool-description {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 5px;
+            background-color: #ecf0f1;
+            border-left: 4px solid #3498db;
+        }
+        .error {
+            background-color: #fdf2f2;
+            border-left-color: #e74c3c;
+            color: #c0392b;
+        }
+        .success {
+            background-color: #f0f9ff;
+            border-left-color: #27ae60;
+            color: #27ae60;
+        }
+        .server-status {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .status-online {
+            background-color: #d5f4e6;
+            color: #27ae60;
+            border: 1px solid #27ae60;
+        }
+        .status-offline {
+            background-color: #fdf2f2;
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 MCP Web Client</h1>
+        
+        <div id="serverStatus" class="server-status status-offline">
+            <strong>Server Status:</strong> <span id="statusText">Checking...</span>
+        </div>
+
+        <div class="tool-section">
+            <div class="tool-title">🌤️ Weather Tool</div>
+            <div class="tool-description">Get weather information for any location</div>
+            <div class="input-group">
+                <label for="weatherLocation">Location:</label>
+                <input type="text" id="weatherLocation" placeholder="e.g., San Francisco, CA" value="San Francisco, CA">
+            </div>
+            <button onclick="getWeather()">Get Weather</button>
+            <div id="weatherResult" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="tool-section">
+            <div class="tool-title">🧮 Calculator Tool</div>
+            <div class="tool-description">Perform mathematical calculations</div>
+            <div class="input-group">
+                <label for="calculationExpression">Expression:</label>
+                <input type="text" id="calculationExpression" placeholder="e.g., 15 * 23" value="15 * 23">
+            </div>
+            <button onclick="calculate()">Calculate</button>
+            <div id="calculationResult" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="tool-section">
+            <div class="tool-title">🕐 Time Tool</div>
+            <div class="tool-description">Get current time in different timezones</div>
+            <div class="input-group">
+                <label for="timezone">Timezone (optional):</label>
+                <input type="text" id="timezone" placeholder="e.g., America/New_York" value="America/New_York">
+            </div>
+            <button onclick="getTime()">Get Time</button>
+            <div id="timeResult" class="result" style="display: none;"></div>
+        </div>
+
+        <div class="tool-section">
+            <div class="tool-title">🔧 Server Control</div>
+            <div class="tool-description">Manage the MCP server</div>
+            <button onclick="startServer()">Start Server</button>
+            <button onclick="stopServer()">Stop Server</button>
+            <button onclick="checkServer()">Check Status</button>
+            <div id="serverControlResult" class="result" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        let serverRunning = false;
+        let serverProcess = null;
+
+        // Check server status on page load
+        window.onload = function() {
+            checkServer();
+        };
+
+        function updateStatus(online, message) {
+            const statusDiv = document.getElementById('serverStatus');
+            const statusText = document.getElementById('statusText');
+            
+            if (online) {
+                statusDiv.className = 'server-status status-online';
+                statusText.textContent = 'Online';
+                serverRunning = true;
+            } else {
+                statusDiv.className = 'server-status status-offline';
+                statusText.textContent = message || 'Offline';
+                serverRunning = false;
+            }
+        }
+
+        function showResult(elementId, content, isError = false) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            element.className = `result ${isError ? 'error' : 'success'}`;
+            element.innerHTML = content;
+        }
+
+        function hideResult(elementId) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'none';
+        }
+
+        async function makeRequest(endpoint, data = null) {
+            try {
+                const response = await fetch(`http://localhost:3000${endpoint}`, {
+                    method: data ? 'POST' : 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: data ? JSON.stringify(data) : null
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('Request failed:', error);
+                throw error;
+            }
+        }
+
+        async function getWeather() {
+            const location = document.getElementById('weatherLocation').value;
+            if (!location) {
+                showResult('weatherResult', 'Please enter a location', true);
+                return;
+            }
+
+            hideResult('weatherResult');
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Loading...';
+            button.disabled = true;
+
+            try {
+                const result = await makeRequest('/weather', { location });
+                showResult('weatherResult', `<strong>Weather in ${location}:</strong><br>${result.result}`);
+            } catch (error) {
+                showResult('weatherResult', `Error: ${error.message}`, true);
+            } finally {
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        }
+
+        async function calculate() {
+            const expression = document.getElementById('calculationExpression').value;
+            if (!expression) {
+                showResult('calculationResult', 'Please enter an expression', true);
+                return;
+            }
+
+            hideResult('calculationResult');
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Loading...';
+            button.disabled = true;
+
+            try {
+                const result = await makeRequest('/calculate', { expression });
+                showResult('calculationResult', `<strong>Calculation:</strong><br>${result.result}`);
+            } catch (error) {
+                showResult('calculationResult', `Error: ${error.message}`, true);
+            } finally {
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        }
+
+        async function getTime() {
+            const timezone = document.getElementById('timezone').value;
+
+            hideResult('timeResult');
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Loading...';
+            button.disabled = true;
+
+            try {
+                const result = await makeRequest('/time', { timezone });
+                showResult('timeResult', `<strong>Current Time:</strong><br>${result.result}`);
+            } catch (error) {
+                showResult('timeResult', `Error: ${error.message}`, true);
+            } finally {
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        }
+
+        async function startServer() {
+            hideResult('serverControlResult');
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Starting...';
+            button.disabled = true;
+
+            try {
+                const result = await makeRequest('/start-server');
+                showResult('serverControlResult', `<strong>Server Status:</strong><br>${result.message}`);
+                if (result.success) {
+                    updateStatus(true, 'Online');
+                }
+            } catch (error) {
+                showResult('serverControlResult', `Error: ${error.message}`, true);
+            } finally {
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        }
+
+        async function stopServer() {
+            hideResult('serverControlResult');
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = 'Stopping...';
+            button.disabled = true;
+
+            try {
+                const result = await makeRequest('/stop-server');
+                showResult('serverControlResult', `<strong>Server Status:</strong><br>${result.message}`);
+                if (result.success) {
+                    updateStatus(false, 'Stopped');
+                }
+            } catch (error) {
+                showResult('serverControlResult', `Error: ${error.message}`, true);
+            } finally {
+                button.textContent = originalText;
+                button.disabled = false;
+            }
+        }
+
+        async function checkServer() {
+            try {
+                const result = await makeRequest('/status');
+                updateStatus(result.running, result.running ? 'Online' : 'Offline');
+            } catch (error) {
+                updateStatus(false, 'Connection Failed');
+            }
+        }
+    </script>
+</body>
+</html>
