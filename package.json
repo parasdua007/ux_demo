@@ -1,0 +1,37 @@
+{
+  "name": "reltio-console-ux-demo",
+  "version": "1.0.0",
+  "description": "UX Demo for Reltio Console Usage Reporting Interface",
+  "main": "final-entitlement-summary.html",
+  "scripts": {
+    "start": "http-server -p 8000 -o final-entitlement-summary.html",
+    "serve": "http-server -p 8000",
+    "demo": "echo 'Opening Reltio Console UX Demo...' && http-server -p 8000 -o final-entitlement-summary.html"
+  },
+  "keywords": [
+    "ux",
+    "demo",
+    "reltio",
+    "console",
+    "usage-reporting",
+    "html",
+    "css",
+    "javascript"
+  ],
+  "author": "Reltio",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "."
+  },
+  "homepage": ".",
+  "bugs": {
+    "url": "."
+  }
+}
