@@ -1,98 +1,59 @@
-# 🚀 Reltio Console UX Demo
+# MCP Server Example
 
-A modern, interactive UX demo showcasing the Reltio Console Usage Reporting interface. This demo is hosted on GitHub Pages and can be accessed by anyone with a single click.
+This is a simple Model Context Protocol (MCP) server implementation that provides a weather tool.
 
-## 🌐 Live Demo
+## Features
 
-**[Click here to view the live demo](https://cursoragent.github.io/reltio-ux-demo/)**
+- **get_weather**: A tool that returns weather information for a given location
 
-## ✨ Features
+## Installation
 
-- **Interactive Dashboard**: Explore usage metrics with real-time data visualization
-- **Date Range Filtering**: Filter data by custom date ranges with intuitive controls
-- **Modern Design**: Clean, responsive interface that works on all devices
-- **Usage Indicators**: Color-coded percentages (Green/Yellow/Orange/Red)
-- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile
-
-## 🎨 Color Coding System
-
-- 🟢 **Green** (< 80%): Normal usage
-- 🟡 **Yellow** (80-90%): Warning level
-- 🟠 **Orange** (90.01-99.99%): High usage
-- 🔴 **Red** (≥ 100%): Critical usage
-
-## 🛠️ Technical Details
-
-- **Framework**: Pure HTML, CSS, and JavaScript
-- **Dependencies**: None (completely self-contained)
-- **Hosting**: GitHub Pages
-- **Browser Support**: Chrome, Firefox, Safari, Edge (modern browsers)
-
-## 📱 Browser Compatibility
-
-| Browser | Version | Status |
-|---------|---------|--------|
-| Chrome | 60+ | ✅ Full Support |
-| Firefox | 55+ | ✅ Full Support |
-| Safari | 12+ | ✅ Full Support |
-| Edge | 79+ | ✅ Full Support |
-
-## 🚀 Quick Start
-
-### Option 1: View Online (Recommended)
-Simply click the live demo link above to view the prototype in your browser.
-
-### Option 2: Run Locally
-1. Clone this repository:
+1. Make sure you have Node.js installed (version 16 or higher)
+2. Install dependencies:
    ```bash
-   git clone https://github.com/cursoragent/reltio-ux-demo.git
-   cd reltio-ux-demo
+   npm install
    ```
 
-2. Open `index.html` in your browser or use a local server:
-   ```bash
-   # Using Python
-   python -m http.server 8000
-   
-   # Using Node.js
-   npx http-server -p 8000
-   ```
+## Usage
 
-## 📁 Project Structure
+### Running the Server
 
-```
-reltio-ux-demo/
-├── index.html                    # Landing page with auto-redirect
-├── final-entitlement-summary.html # Main UX demo
-├── README.md                     # This file
-├── .github/workflows/            # GitHub Actions for deployment
-└── start-demo.sh                 # Local development script
+To start the MCP server:
+
+```bash
+npm start
 ```
 
-## 🔧 Development
+The server will start and listen for MCP protocol messages via stdio.
 
-This demo is built with:
-- **HTML5**: Semantic markup
-- **CSS3**: Modern styling with Flexbox and Grid
-- **Vanilla JavaScript**: Interactive functionality
-- **Responsive Design**: Mobile-first approach
+### Testing with MCP Client
 
-## 📄 License
+You can test this server with any MCP-compatible client. The server provides:
 
-This project is provided for demonstration purposes.
+- **Tool**: `get_weather`
+  - **Description**: Get the current weather in a given location
+  - **Parameters**: 
+    - `location` (string, required): The city and state, e.g. "San Francisco, CA"
 
-## 🤝 Contributing
+### Example Usage
 
-Feel free to fork this repository and submit pull requests for improvements.
+When a client calls the `get_weather` tool with location "New York, NY", the server will respond with:
+```
+The weather in New York, NY is sunny and 72°F.
+```
 
-## 📞 Support
+## Configuration
 
-If you encounter any issues:
-1. Check browser compatibility
-2. Ensure JavaScript is enabled
-3. Try refreshing the page
-4. Open an issue on GitHub
+This server is configured to use stdio transport, which means it communicates through standard input/output. This is the standard way MCP servers communicate with clients.
 
----
+## Development
 
-**Demo URL**: https://cursoragent.github.io/reltio-ux-demo/
+To modify the server:
+
+1. Edit `index.js` to add new tools or modify existing ones
+2. Update the capabilities object if you add new resource types
+3. Restart the server to apply changes
+
+## MCP Protocol
+
+This server implements the Model Context Protocol, which allows AI models to interact with external tools and resources. For more information, visit: https://modelcontextprotocol.io/

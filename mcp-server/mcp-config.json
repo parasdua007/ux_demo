@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "example-server": {
+      "command": "node",
+      "args": ["/workspace/mcp-server/index.js"],
+      "env": {}
+    }
+  }
+}

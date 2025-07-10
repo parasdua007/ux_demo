@@ -1,37 +1,17 @@
 {
-  "name": "reltio-console-ux-demo",
+  "name": "mcp-server",
   "version": "1.0.0",
-  "description": "UX Demo for Reltio Console Usage Reporting Interface",
-  "main": "final-entitlement-summary.html",
+  "type": "module",
+  "main": "index.js",
   "scripts": {
-    "start": "http-server -p 8000 -o final-entitlement-summary.html",
-    "serve": "http-server -p 8000",
-    "demo": "echo 'Opening Reltio Console UX Demo...' && http-server -p 8000 -o final-entitlement-summary.html"
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [
-    "ux",
-    "demo",
-    "reltio",
-    "console",
-    "usage-reporting",
-    "html",
-    "css",
-    "javascript"
-  ],
-  "author": "Reltio",
-  "license": "MIT",
-  "devDependencies": {
-    "http-server": "^14.1.1"
-  },
-  "engines": {
-    "node": ">=12.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "."
-  },
-  "homepage": ".",
-  "bugs": {
-    "url": "."
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0"
   }
 }
