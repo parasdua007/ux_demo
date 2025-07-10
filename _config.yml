@@ -1,0 +1,23 @@
+# GitHub Pages configuration
+theme: jekyll-theme-minimal
+title: Reltio Console UX Demo
+description: Interactive UX demo for Reltio Console Usage Reporting
+url: "https://parasdua007.github.io"
+baseurl: "/ux_demo"
+
+# Build settings
+markdown: kramdown
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+
+# Exclude from processing
+exclude:
+  - .github/
+  - node_modules/
+  - package.json
+  - package-lock.json
+  - start-demo.sh
+  - start-demo.bat
+  - deploy.sh
+  - DEMO-SETUP.md
