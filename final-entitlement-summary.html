@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reltio Console - Usage Reporting</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #212529;
+        }
+
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .left-navigation {
+            width: 180px;
+            background-color: #ffffff;
+            border-right: 1px solid #e9ecef;
+            flex-shrink: 0;
+        }
+
+        .nav-header {
+            padding: 16px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .nav-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #495057;
+            margin: 0;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 12px 16px;
+            color: #6c757d;
+            text-decoration: none;
+            font-size: 14px;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .nav-link:hover {
+            background-color: #f8f9fa;
+            color: #495057;
+        }
+
+        .nav-link.active {
+            background-color: #e3f2fd;
+            color: #1976d2;
+            font-weight: 500;
+        }
+
+        .main-content {
+            flex: 1;
+            background-color: #f8f9fa;
+        }
+
+        .content-wrapper {
+            padding: 24px;
+            background-color: #ffffff;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #212529;
+            margin: 0;
+        }
+
+        .page-subtitle {
+            font-size: 14px;
+            color: #6c757d;
+            margin: 4px 0 0 0;
+        }
+
+        .content-section {
+            margin-bottom: 32px;
+        }
+
+        .section-header {
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #212529;
+            margin: 0 0 4px 0;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: #6c757d;
+            margin: 0;
+        }
+
+        .data-table-container {
+            background-color: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .data-table thead th {
+            background-color: #f8f9fa;
+            color: #495057;
+            font-weight: 600;
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .data-table tbody td {
+            padding: 12px 16px;
+            border-bottom: 1px solid #f8f9fa;
+            color: #212529;
+            vertical-align: middle;
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        /* EXACT COLOR CODING AS REQUESTED */
+        .usage-indicator {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+            min-width: 50px;
+        }
+
+        /* Green: Usage < 80% */
+        .usage-normal {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        /* Yellow: Usage between 80% and 90% */
+        .usage-warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        /* Orange: Usage between 90.01% and 99.99% */
+        .usage-orange {
+            background-color: #ffeaa7;
+            color: #b8860b;
+            border: 1px solid #ffd93d;
+        }
+
+        /* Red: Usage ≥ 100% */
+        .usage-critical {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .pagination-btn {
+            padding: 4px 8px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            background-color: #ffffff;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* Date Range Filter Styles - Matching screenshot exactly */
+        .date-range-filter {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .date-range-display {
+            text-align: right;
+        }
+
+        .date-range-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #495057;
+            margin-bottom: 2px;
+        }
+
+        .date-range-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: transparent;
+            border: none;
+            font-size: 14px;
+            color: #6c757d;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background-color 0.15s ease;
+        }
+
+        .date-range-button:hover {
+            background-color: #f8f9fa;
+        }
+
+        .dropdown-arrow {
+            font-size: 10px;
+            color: #6c757d;
+            transition: transform 0.15s ease;
+        }
+
+        .date-range-filter.open .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .date-range-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            z-index: 1000;
+            margin-top: 4px;
+            background: #ffffff;
+            border: 1px solid #e9ecef;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            min-width: 280px;
+        }
+
+        .dropdown-content {
+            padding: 8px 0;
+        }
+
+        .dropdown-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            text-align: left;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .dropdown-item.active {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .dropdown-item-label {
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .dropdown-item-display {
+            font-size: 13px;
+            color: #6c757d;
+        }
+
+        .dropdown-item.active .dropdown-item-label {
+            color: #1976d2;
+        }
+
+        .dropdown-item.active .dropdown-item-display {
+            color: #1976d2;
+        }
+
+        .custom-date-section {
+            padding: 16px;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .custom-date-header {
+            font-weight: 500;
+            color: #495057;
+            margin-bottom: 12px;
+        }
+
+        .custom-date-inputs {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .custom-date-input {
+            flex: 1;
+            padding: 6px 8px;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #495057;
+        }
+
+        .custom-date-input:focus {
+            outline: none;
+            border-color: #1976d2;
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.1);
+        }
+
+        .date-separator {
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        .apply-custom-date {
+            width: 100%;
+            padding: 6px 12px;
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+        }
+
+        .apply-custom-date:hover:not(:disabled) {
+            background-color: #1565c0;
+        }
+
+        .apply-custom-date:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            
+            .date-range-filter {
+                align-items: flex-start;
+            }
+            
+            .date-range-display {
+                text-align: left;
+            }
+            
+            .date-range-dropdown {
+                right: auto;
+                left: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <nav class="left-navigation">
+            <div class="nav-header">
+                <h1 class="nav-title">Usage Reporting</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><button class="nav-link" onclick="showTab('summary')">Summary</button></li>
+                <li><button class="nav-link" onclick="showTab('consolidated-profiles')">Consolidated profiles</button></li>
+                <li><button class="nav-link" onclick="showTab('api-usage')">API usage</button></li>
+                <li><button class="nav-link" onclick="showTab('storage')">Storage</button></li>
+                <li><button class="nav-link active" onclick="showTab('entitlement-summary')">Entitlement Summary</button></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <div id="entitlement-summary" class="tab-content">
+                <div class="content-wrapper">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">Entitlement Summary</h1>
+                            <p class="page-subtitle">Consolidated view of entitlements and usage metrics</p>
+                        </div>
+                        
+                        <!-- Date Range Filter - Matching screenshot exactly -->
+                        <div class="date-range-filter" id="dateRangeFilter">
+                            <div class="date-range-display">
+                                <span class="date-range-label">This month</span>
+                                <button class="date-range-button" onclick="toggleDateFilter()">
+                                    <span id="dateRangeText">01 Jul - 9 Jul 2025</span>
+                                    <span class="dropdown-arrow">▼</span>
+                                </button>
+                            </div>
+                            
+                            <div class="date-range-dropdown hidden" id="dateRangeDropdown">
+                                <div class="dropdown-content">
+                                    <button class="dropdown-item active" onclick="selectDateRange('This month', '01 Jul - 9 Jul 2025')">
+                                        <span class="dropdown-item-label">This month</span>
+                                        <span class="dropdown-item-display">01 Jul - 9 Jul 2025</span>
+                                    </button>
+                                    <button class="dropdown-item" onclick="selectDateRange('Last 30 days', '10 Jun - 9 Jul 2025')">
+                                        <span class="dropdown-item-label">Last 30 days</span>
+                                        <span class="dropdown-item-display">10 Jun - 9 Jul 2025</span>
+                                    </button>
+                                    <button class="dropdown-item" onclick="selectDateRange('Last 90 days', '10 Apr - 9 Jul 2025')">
+                                        <span class="dropdown-item-label">Last 90 days</span>
+                                        <span class="dropdown-item-display">10 Apr - 9 Jul 2025</span>
+                                    </button>
+                                    <div class="custom-date-section">
+                                        <div class="custom-date-header">Custom Range</div>
+                                        <div class="custom-date-inputs">
+                                            <input type="date" class="custom-date-input" id="customStartDate" value="2025-06-01">
+                                            <span class="date-separator">to</span>
+                                            <input type="date" class="custom-date-input" id="customEndDate" value="2025-07-09">
+                                        </div>
+                                        <button class="apply-custom-date" onclick="applyCustomDate()">Apply</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- CP Entitlements Section -->
+                    <div class="content-section">
+                        <div class="section-header">
+                            <h2 class="section-title">CP Entitlements</h2>
+                            <p class="section-subtitle">Tenant level entitlements and usage</p>
+                        </div>
+                        
+                        <div class="data-table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Tenant ID</th>
+                                        <th>Tenant Purpose</th>
+                                        <th>CP Entitlement (Quota)</th>
+                                        <th>CP Usage</th> <!-- Updated column name -->
+                                        <th>% Usage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>PROD-001</td>
+                                        <td>PROD</td>
+                                        <td>500,000</td>
+                                        <td>425,000</td>
+                                        <td><span class="usage-indicator usage-warning">85.0%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>DEV-001</td>
+                                        <td>DEV</td>
+                                        <td>200,000</td>
+                                        <td>45,000</td>
+                                        <td><span class="usage-indicator usage-normal">22.5%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>TEST-001</td>
+                                        <td>TEST</td>
+                                        <td>150,000</td>
+                                        <td>92,000</td>
+                                        <td><span class="usage-indicator usage-normal">61.3%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>STAGING-001</td>
+                                        <td>STAGING</td>
+                                        <td>200,000</td>
+                                        <td>156,000</td>
+                                        <td><span class="usage-indicator usage-normal">78.0%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>PROD-002</td>
+                                        <td>PROD</td>
+                                        <td>750,000</td>
+                                        <td>680,000</td>
+                                        <td><span class="usage-indicator usage-orange">90.7%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>PROD-003</td>
+                                        <td>PROD</td>
+                                        <td>100,000</td>
+                                        <td>95,000</td>
+                                        <td><span class="usage-indicator usage-orange">95.0%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>TEST-002</td>
+                                        <td>TEST</td>
+                                        <td>50,000</td>
+                                        <td>50,000</td>
+                                        <td><span class="usage-indicator usage-critical">100.0%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>DEV-002</td>
+                                        <td>DEV</td>
+                                        <td>80,000</td>
+                                        <td>84,000</td>
+                                        <td><span class="usage-indicator usage-critical">105.0%</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="pagination-container">
+                                <div>Rows per page: 20</div>
+                                <div>
+                                    <span>1–8 of 8</span>
+                                    <button class="pagination-btn">‹</button>
+                                    <button class="pagination-btn">›</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- API Entitlements Section -->
+                    <div class="content-section">
+                        <div class="section-header">
+                            <h2 class="section-title">API Entitlements</h2>
+                            <p class="section-subtitle">Contract level entitlements and usage</p>
+                        </div>
+                        
+                        <div class="data-table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Contract Number</th>
+                                        <th>API Entitlement (Quota)</th>
+                                        <th>API Usage</th>
+                                        <th>% Usage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>CTR-2024-001</td>
+                                        <td>1,000,000</td>
+                                        <td>875,000</td>
+                                        <td><span class="usage-indicator usage-warning">87.5%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CTR-2024-002</td>
+                                        <td>500,000</td>
+                                        <td>325,000</td>
+                                        <td><span class="usage-indicator usage-normal">65.0%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CTR-2024-003</td>
+                                        <td>2,000,000</td>
+                                        <td>1,250,000</td>
+                                        <td><span class="usage-indicator usage-normal">62.5%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CTR-2024-004</td>
+                                        <td>750,000</td>
+                                        <td>680,000</td>
+                                        <td><span class="usage-indicator usage-orange">90.7%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CTR-2024-005</td>
+                                        <td>300,000</td>
+                                        <td>285,000</td>
+                                        <td><span class="usage-indicator usage-orange">95.0%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CTR-2024-006</td>
+                                        <td>150,000</td>
+                                        <td>150,000</td>
+                                        <td><span class="usage-indicator usage-critical">100.0%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CTR-2024-007</td>
+                                        <td>100,000</td>
+                                        <td>110,000</td>
+                                        <td><span class="usage-indicator usage-critical">110.0%</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="pagination-container">
+                                <div>Rows per page: 20</div>
+                                <div>
+                                    <span>1–7 of 7</span>
+                                    <button class="pagination-btn">‹</button>
+                                    <button class="pagination-btn">›</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- RSU Entitlements Section -->
+                    <div class="content-section">
+                        <div class="section-header">
+                            <h2 class="section-title">RSU Entitlements</h2>
+                            <p class="section-subtitle">Contract level entitlements and usage</p>
+                        </div>
+                        
+                        <div class="data-table-container">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Contract Number</th>
+                                        <th>RSU Entitlement (Quota)</th>
+                                        <th>RSU Usage</th>
+                                        <th>% Usage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>CTR-2024-001</td>
+                                        <td>100,000</td>
+                                        <td>87,500</td>
+                                        <td><span class="usage-indicator usage-warning">87.5%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CTR-2024-002</td>
+                                        <td>50,000</td>
+                                        <td>32,500</td>
+                                        <td><span class="usage-indicator usage-normal">65.0%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CTR-2024-003</td>
+                                        <td>200,000</td>
+                                        <td>125,000</td>
+                                        <td><span class="usage-indicator usage-normal">62.5%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CTR-2024-004</td>
+                                        <td>75,000</td>
+                                        <td>68,000</td>
+                                        <td><span class="usage-indicator usage-orange">90.7%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CTR-2024-005</td>
+                                        <td>30,000</td>
+                                        <td>28,500</td>
+                                        <td><span class="usage-indicator usage-orange">95.0%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CTR-2024-006</td>
+                                        <td>25,000</td>
+                                        <td>25,000</td>
+                                        <td><span class="usage-indicator usage-critical">100.0%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>CTR-2024-007</td>
+                                        <td>40,000</td>
+                                        <td>44,000</td>
+                                        <td><span class="usage-indicator usage-critical">110.0%</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="pagination-container">
+                                <div>Rows per page: 20</div>
+                                <div>
+                                    <span>1–7 of 7</span>
+                                    <button class="pagination-btn">‹</button>
+                                    <button class="pagination-btn">›</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Placeholder for other tabs -->
+            <div id="summary" class="tab-content hidden">
+                <div class="content-wrapper">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">Summary</h1>
+                            <p class="page-subtitle">This month's usage metrics</p>
+                        </div>
+                    </div>
+                    <p>Summary content...</p>
+                </div>
+            </div>
+
+            <div id="consolidated-profiles" class="tab-content hidden">
+                <div class="content-wrapper">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">Consolidated Profiles</h1>
+                        </div>
+                    </div>
+                    <p>Consolidated profiles content...</p>
+                </div>
+            </div>
+
+            <div id="api-usage" class="tab-content hidden">
+                <div class="content-wrapper">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">API Usage</h1>
+                        </div>
+                    </div>
+                    <p>API usage content...</p>
+                </div>
+            </div>
+
+            <div id="storage" class="tab-content hidden">
+                <div class="content-wrapper">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">Storage</h1>
+                        </div>
+                    </div>
+                    <p>Storage content...</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        function showTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Remove active class from all nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabId).classList.remove('hidden');
+            
+            // Add active class to clicked nav link
+            event.target.classList.add('active');
+        }
+
+        // Date filter functionality
+        let isDropdownOpen = false;
+        
+        function toggleDateFilter() {
+            const dropdown = document.getElementById('dateRangeDropdown');
+            const filter = document.getElementById('dateRangeFilter');
+            
+            if (isDropdownOpen) {
+                dropdown.classList.add('hidden');
+                filter.classList.remove('open');
+                isDropdownOpen = false;
+            } else {
+                dropdown.classList.remove('hidden');
+                filter.classList.add('open');
+                isDropdownOpen = true;
+            }
+        }
+        
+        function selectDateRange(label, display) {
+            // Update the display
+            document.querySelector('.date-range-label').textContent = label;
+            document.getElementById('dateRangeText').textContent = display;
+            
+            // Update active state
+            document.querySelectorAll('.dropdown-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Close dropdown
+            toggleDateFilter();
+            
+            // Trigger data update (placeholder)
+            console.log('Date range selected:', label, display);
+        }
+        
+        function applyCustomDate() {
+            const startDate = document.getElementById('customStartDate').value;
+            const endDate = document.getElementById('customEndDate').value;
+            
+            if (startDate && endDate) {
+                const startFormatted = new Date(startDate).toLocaleDateString('en-GB', { 
+                    day: '2-digit', 
+                    month: 'short', 
+                    year: 'numeric' 
+                }).replace(/,/g, '');
+                
+                const endFormatted = new Date(endDate).toLocaleDateString('en-GB', { 
+                    day: '2-digit', 
+                    month: 'short', 
+                    year: 'numeric' 
+                }).replace(/,/g, '');
+                
+                const display = `${startFormatted} - ${endFormatted}`;
+                
+                // Update the display
+                document.querySelector('.date-range-label').textContent = 'Custom range';
+                document.getElementById('dateRangeText').textContent = display;
+                
+                // Close dropdown
+                toggleDateFilter();
+                
+                // Trigger data update (placeholder)
+                console.log('Custom date range applied:', display);
+            }
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dateFilter = document.getElementById('dateRangeFilter');
+            if (!dateFilter.contains(event.target) && isDropdownOpen) {
+                toggleDateFilter();
+            }
+        });
+        
+        // Usage class determination function
+        function getUsageClass(percentage) {
+            if (percentage >= 100) return 'usage-critical';    // Red: ≥ 100%
+            if (percentage >= 90.01) return 'usage-orange';    // Orange: 90.01-99.99%
+            if (percentage >= 80) return 'usage-warning';      // Yellow: 80-90%
+            return 'usage-normal';                             // Green: < 80%
+        }
+    </script>
+</body>
+</html>
