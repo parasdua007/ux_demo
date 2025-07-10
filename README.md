@@ -1,78 +1,98 @@
-# Reltio Console UX Demo
+# 🚀 Reltio Console UX Demo
 
-This repository contains a UX demo for the Reltio Console Usage Reporting interface. The demo showcases a modern, responsive web interface with interactive features.
+A modern, interactive UX demo showcasing the Reltio Console Usage Reporting interface. This demo is hosted on GitHub Pages and can be accessed by anyone with a single click.
 
-## Quick Start
+## 🌐 Live Demo
 
-### Option 1: Open directly in browser (Recommended)
-Simply open the `final-entitlement-summary.html` file in any modern web browser:
-- Double-click the HTML file
-- Or drag and drop it into your browser window
-- Or right-click and select "Open with" your preferred browser
+**[Click here to view the live demo](https://cursoragent.github.io/reltio-ux-demo/)**
 
-### Option 2: Run with a local server
-For the best experience, you can run it with a local HTTP server:
+## ✨ Features
 
-#### Using Python (if you have Python installed):
-```bash
-# Python 3
-python -m http.server 8000
+- **Interactive Dashboard**: Explore usage metrics with real-time data visualization
+- **Date Range Filtering**: Filter data by custom date ranges with intuitive controls
+- **Modern Design**: Clean, responsive interface that works on all devices
+- **Usage Indicators**: Color-coded percentages (Green/Yellow/Orange/Red)
+- **Responsive Design**: Works seamlessly on desktop, tablet, and mobile
 
-# Python 2
-python -m SimpleHTTPServer 8000
+## 🎨 Color Coding System
+
+- 🟢 **Green** (< 80%): Normal usage
+- 🟡 **Yellow** (80-90%): Warning level
+- 🟠 **Orange** (90.01-99.99%): High usage
+- 🔴 **Red** (≥ 100%): Critical usage
+
+## 🛠️ Technical Details
+
+- **Framework**: Pure HTML, CSS, and JavaScript
+- **Dependencies**: None (completely self-contained)
+- **Hosting**: GitHub Pages
+- **Browser Support**: Chrome, Firefox, Safari, Edge (modern browsers)
+
+## 📱 Browser Compatibility
+
+| Browser | Version | Status |
+|---------|---------|--------|
+| Chrome | 60+ | ✅ Full Support |
+| Firefox | 55+ | ✅ Full Support |
+| Safari | 12+ | ✅ Full Support |
+| Edge | 79+ | ✅ Full Support |
+
+## 🚀 Quick Start
+
+### Option 1: View Online (Recommended)
+Simply click the live demo link above to view the prototype in your browser.
+
+### Option 2: Run Locally
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/cursoragent/reltio-ux-demo.git
+   cd reltio-ux-demo
+   ```
+
+2. Open `index.html` in your browser or use a local server:
+   ```bash
+   # Using Python
+   python -m http.server 8000
+   
+   # Using Node.js
+   npx http-server -p 8000
+   ```
+
+## 📁 Project Structure
+
 ```
-Then open http://localhost:8000/final-entitlement-summary.html in your browser.
-
-#### Using Node.js (if you have Node.js installed):
-```bash
-# Install a simple HTTP server globally
-npm install -g http-server
-
-# Run the server
-http-server -p 8000
+reltio-ux-demo/
+├── index.html                    # Landing page with auto-redirect
+├── final-entitlement-summary.html # Main UX demo
+├── README.md                     # This file
+├── .github/workflows/            # GitHub Actions for deployment
+└── start-demo.sh                 # Local development script
 ```
-Then open http://localhost:8000/final-entitlement-summary.html in your browser.
 
-#### Using PHP (if you have PHP installed):
-```bash
-php -S localhost:8000
-```
-Then open http://localhost:8000/final-entitlement-summary.html in your browser.
+## 🔧 Development
 
-## Features
+This demo is built with:
+- **HTML5**: Semantic markup
+- **CSS3**: Modern styling with Flexbox and Grid
+- **Vanilla JavaScript**: Interactive functionality
+- **Responsive Design**: Mobile-first approach
 
-The UX demo includes:
-- **Responsive Design**: Works on desktop, tablet, and mobile devices
-- **Interactive Navigation**: Click through different sections
-- **Date Range Filter**: Interactive dropdown with custom date selection
-- **Usage Indicators**: Color-coded usage percentages
-- **Modern UI**: Clean, professional interface matching modern design standards
+## 📄 License
 
-## Browser Compatibility
+This project is provided for demonstration purposes.
 
-This demo works in all modern browsers:
-- Chrome (recommended)
-- Firefox
-- Safari
-- Edge
+## 🤝 Contributing
 
-## File Structure
+Feel free to fork this repository and submit pull requests for improvements.
 
-- `final-entitlement-summary.html` - The main demo file (self-contained)
-- `README.md` - This documentation file
+## 📞 Support
 
-## No Dependencies Required
+If you encounter any issues:
+1. Check browser compatibility
+2. Ensure JavaScript is enabled
+3. Try refreshing the page
+4. Open an issue on GitHub
 
-The demo is completely self-contained with all CSS and JavaScript embedded in the HTML file. No external dependencies or internet connection required!
+---
 
-## Troubleshooting
-
-If the demo doesn't display properly:
-1. Make sure you're using a modern browser
-2. Try refreshing the page (Ctrl+F5 or Cmd+Shift+R)
-3. Check that JavaScript is enabled in your browser
-4. If using a local server, ensure the port isn't blocked by your firewall
-
-## License
-
-This demo is provided for demonstration purposes.
+**Demo URL**: https://cursoragent.github.io/reltio-ux-demo/
