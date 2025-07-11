@@ -413,7 +413,66 @@
                 left: 0;
             }
         }
+
+        .info-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background-color: #e9ecef;
+            color: #495057;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 12px;
+            line-height: 16px;
+            cursor: pointer;
+            margin-left: 4px;
+            position: relative;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 4px;
+        }
+
+        .dot.green { background-color: #d4edda; }
+        .dot.yellow { background-color: #fff3cd; }
+        .dot.orange { background-color: #ffeaa7; }
+        .dot.red { background-color: #f8d7da; }
+
+        .info-icon::after {
+          content: attr(data-tooltip);
+          white-space: pre-line; /* Enables \n line breaks */
+          position: absolute;
+          background: white;
+          border: 1px solid #ccc;
+          padding: 8px;
+          display: none;
+          z-index: 10;
+        }
+
+        .info-icon:hover::after {
+          display: block;
+        }
+
+        .symbol {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 4px;
+            margin-right: 4px;
+        }
+
+        .symbol.green { background-color: #d4edda; }
+        .symbol.yellow { background-color: #fff3cd; }
+        .symbol.orange { background-color: #ffeaa7; }
+        .symbol.red { background-color: #f8d7da; }
     </style>
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/light.css" />
+    <script src="https://unpkg.com/@popperjs/core@2"></script>
+    <script src="https://unpkg.com/tippy.js@6"></script>
 </head>
 <body>
     <div class="app-container">
@@ -480,7 +539,7 @@
                     <!-- CP Entitlements Section -->
                     <div class="content-section">
                         <div class="section-header">
-                            <h2 class="section-title">CP Entitlements</h2>
+                            <h2 class="section-title">Consolidated Profiles Entitlements</h2>
                             <p class="section-subtitle">Tenant level entitlements and usage</p>
                         </div>
                         
@@ -488,15 +547,17 @@
                             <table class="data-table">
                                 <thead>
                                     <tr>
+                                        <th>Contract ID</th>
                                         <th>Tenant ID</th>
                                         <th>Tenant Purpose</th>
-                                        <th>CP Entitlement (Quota)</th>
-                                        <th>CP Usage</th> <!-- Updated column name -->
-                                        <th>% Usage</th>
+                                        <th>CP Entitlement</th>
+                                        <th>CP Usage</th>
+                                        <th>% Usage <span class="info-icon" data-tippy-content="<span class='symbol green'></span> ≤ 80% usage<br><span class='symbol yellow'></span> > 80% and ≤ 90%<br><span class='symbol orange'></span> > 90% and < 100%<br><span class='symbol red'></span> ≥ 100%">i</span></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
+                                        <td>CON-001</td>
                                         <td>PROD-001</td>
                                         <td>PROD</td>
                                         <td>500,000</td>
@@ -504,6 +565,7 @@
                                         <td><span class="usage-indicator usage-warning">85.0%</span></td>
                                     </tr>
                                     <tr>
+                                        <td>CON-001</td>
                                         <td>DEV-001</td>
                                         <td>DEV</td>
                                         <td>200,000</td>
@@ -511,6 +573,7 @@
                                         <td><span class="usage-indicator usage-normal">22.5%</span></td>
                                     </tr>
                                     <tr>
+                                        <td>CON-001</td>
                                         <td>TEST-001</td>
                                         <td>TEST</td>
                                         <td>150,000</td>
@@ -518,6 +581,7 @@
                                         <td><span class="usage-indicator usage-normal">61.3%</span></td>
                                     </tr>
                                     <tr>
+                                        <td>CON-001</td>
                                         <td>STAGING-001</td>
                                         <td>STAGING</td>
                                         <td>200,000</td>
@@ -525,6 +589,7 @@
                                         <td><span class="usage-indicator usage-normal">78.0%</span></td>
                                     </tr>
                                     <tr>
+                                        <td>CON-002</td>
                                         <td>PROD-002</td>
                                         <td>PROD</td>
                                         <td>750,000</td>
@@ -532,6 +597,7 @@
                                         <td><span class="usage-indicator usage-orange">90.7%</span></td>
                                     </tr>
                                     <tr>
+                                        <td>CON-003</td>
                                         <td>PROD-003</td>
                                         <td>PROD</td>
                                         <td>100,000</td>
@@ -539,6 +605,7 @@
                                         <td><span class="usage-indicator usage-orange">95.0%</span></td>
                                     </tr>
                                     <tr>
+                                        <td>CON-002</td>
                                         <td>TEST-002</td>
                                         <td>TEST</td>
                                         <td>50,000</td>
@@ -546,6 +613,7 @@
                                         <td><span class="usage-indicator usage-critical">100.0%</span></td>
                                     </tr>
                                     <tr>
+                                        <td>CON-002</td>
                                         <td>DEV-002</td>
                                         <td>DEV</td>
                                         <td>80,000</td>
@@ -577,9 +645,9 @@
                                 <thead>
                                     <tr>
                                         <th>Contract Number</th>
-                                        <th>API Entitlement (Quota)</th>
+                                        <th>API Entitlement</th>
                                         <th>API Usage</th>
-                                        <th>% Usage</th>
+                                        <th>% Usage <span class="info-icon" data-tippy-content="<span class='symbol green'></span> ≤ 80% usage<br><span class='symbol yellow'></span> > 80% and ≤ 90%<br><span class='symbol orange'></span> > 90% and < 100%<br><span class='symbol red'></span> ≥ 100%">i</span></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -650,9 +718,9 @@
                                 <thead>
                                     <tr>
                                         <th>Contract Number</th>
-                                        <th>RSU Entitlement (Quota)</th>
+                                        <th>RSU Entitlement</th>
                                         <th>RSU Usage</th>
-                                        <th>% Usage</th>
+                                        <th>% Usage <span class="info-icon" data-tippy-content="<span class='symbol green'></span> ≤ 80% usage<br><span class='symbol yellow'></span> > 80% and ≤ 90%<br><span class='symbol orange'></span> > 90% and < 100%<br><span class='symbol red'></span> ≥ 100%">i</span></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -863,6 +931,25 @@
             if (percentage >= 80) return 'usage-warning';      // Yellow: 80-90%
             return 'usage-normal';                             // Green: < 80%
         }
+
+        // JS to enable HTML tooltips with Tippy.js
+        // JavaScript: make sure this runs after the DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+          tippy('.info-icon', {
+            allowHTML: true,   // THIS enables line breaks and HTML parsing
+            placement: 'right',
+            theme: 'light',    // Optional: matches white theme
+          });
+        });
+
+        // Initialize Tippy.js
+        document.addEventListener('DOMContentLoaded', function () {
+            tippy('#usage-info', {
+                allowHTML: true,
+                theme: 'light',
+                placement: 'right',
+            });
+        });
     </script>
 </body>
 </html>
