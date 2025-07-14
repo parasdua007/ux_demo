@@ -469,6 +469,22 @@
         .symbol.yellow { background-color: #fff3cd; }
         .symbol.orange { background-color: #ffeaa7; }
         .symbol.red { background-color: #f8d7da; }
+
+        /* Add styles to fix the header pane */
+        .page-header {
+            position: sticky;
+            top: 0;
+            background-color: #ffffff;
+            z-index: 1000;
+        }
+
+        /* Add styles to fix the left navigation pane */
+        .left-navigation {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+        }
     </style>
     <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/themes/light.css" />
     <script src="https://unpkg.com/@popperjs/core@2"></script>
@@ -560,64 +576,64 @@
                                         <td>CON-001</td>
                                         <td>PROD-001</td>
                                         <td>PROD</td>
-                                        <td>500,000</td>
-                                        <td>425,000</td>
+                                        <td data-raw="500000">500,000</td>
+                                        <td>425000</td>
                                         <td><span class="usage-indicator usage-warning">85.0%</span></td>
                                     </tr>
                                     <tr>
                                         <td>CON-001</td>
                                         <td>DEV-001</td>
                                         <td>DEV</td>
-                                        <td>200,000</td>
-                                        <td>45,000</td>
+                                        <td data-raw="200000">200,000</td>
+                                        <td>45000</td>
                                         <td><span class="usage-indicator usage-normal">22.5%</span></td>
                                     </tr>
                                     <tr>
                                         <td>CON-001</td>
                                         <td>TEST-001</td>
                                         <td>TEST</td>
-                                        <td>150,000</td>
-                                        <td>92,000</td>
+                                        <td data-raw="500000">500,000</td>
+                                        <td>527000</td>
                                         <td><span class="usage-indicator usage-normal">61.3%</span></td>
                                     </tr>
                                     <tr>
                                         <td>CON-001</td>
                                         <td>STAGING-001</td>
                                         <td>STAGING</td>
-                                        <td>200,000</td>
-                                        <td>156,000</td>
+                                        <td data-raw="200000">200,000</td>
+                                        <td>156000</td>
                                         <td><span class="usage-indicator usage-normal">78.0%</span></td>
                                     </tr>
                                     <tr>
                                         <td>CON-002</td>
                                         <td>PROD-002</td>
                                         <td>PROD</td>
-                                        <td>750,000</td>
-                                        <td>680,000</td>
+                                        <td data-raw="750000">750,000</td>
+                                        <td>680000</td>
                                         <td><span class="usage-indicator usage-orange">90.7%</span></td>
                                     </tr>
                                     <tr>
                                         <td>CON-003</td>
                                         <td>PROD-003</td>
                                         <td>PROD</td>
-                                        <td>100,000</td>
-                                        <td>95,000</td>
+                                        <td data-raw="100000">100,000</td>
+                                        <td>95000</td>
                                         <td><span class="usage-indicator usage-orange">95.0%</span></td>
                                     </tr>
                                     <tr>
                                         <td>CON-002</td>
                                         <td>TEST-002</td>
                                         <td>TEST</td>
-                                        <td>50,000</td>
-                                        <td>50,000</td>
+                                        <td data-raw="100000">100,000</td>
+                                        <td>50000</td>
                                         <td><span class="usage-indicator usage-critical">100.0%</span></td>
                                     </tr>
                                     <tr>
                                         <td>CON-002</td>
                                         <td>DEV-002</td>
                                         <td>DEV</td>
-                                        <td>80,000</td>
-                                        <td>84,000</td>
+                                        <td data-raw="200000">200,000</td>
+                                        <td>284000</td>
                                         <td><span class="usage-indicator usage-critical">105.0%</span></td>
                                     </tr>
                                 </tbody>
@@ -645,8 +661,9 @@
                                 <thead>
                                     <tr>
                                         <th>Contract Number</th>
-                                        <th>API Entitlement</th>
-                                        <th>API Usage</th>
+                                        <th>Daily API Entitlement</th>
+                                        <th>Total API Usage</th>
+                                        <th>Daily Average API Usage</th>
                                         <th>% Usage <span class="info-icon" data-tippy-content="<span class='symbol green'></span> ≤ 80% usage<br><span class='symbol yellow'></span> > 80% and ≤ 90%<br><span class='symbol orange'></span> > 90% and < 100%<br><span class='symbol red'></span> ≥ 100%">i</span></th>
                                     </tr>
                                 </thead>
@@ -655,11 +672,13 @@
                                         <td>CTR-2024-001</td>
                                         <td>1,000,000</td>
                                         <td>875,000</td>
+                                        <td>875,000</td>
                                         <td><span class="usage-indicator usage-warning">87.5%</span></td>
                                     </tr>
                                     <tr>
                                         <td>CTR-2024-002</td>
                                         <td>500,000</td>
+                                        <td>325,000</td>
                                         <td>325,000</td>
                                         <td><span class="usage-indicator usage-normal">65.0%</span></td>
                                     </tr>
@@ -667,11 +686,13 @@
                                         <td>CTR-2024-003</td>
                                         <td>2,000,000</td>
                                         <td>1,250,000</td>
+                                        <td>1,250,000</td>
                                         <td><span class="usage-indicator usage-normal">62.5%</span></td>
                                     </tr>
                                     <tr>
                                         <td>CTR-2024-004</td>
                                         <td>750,000</td>
+                                        <td>680,000</td>
                                         <td>680,000</td>
                                         <td><span class="usage-indicator usage-orange">90.7%</span></td>
                                     </tr>
@@ -679,10 +700,12 @@
                                         <td>CTR-2024-005</td>
                                         <td>300,000</td>
                                         <td>285,000</td>
+                                        <td>285,000</td>
                                         <td><span class="usage-indicator usage-orange">95.0%</span></td>
                                     </tr>
                                     <tr>
                                         <td>CTR-2024-006</td>
+                                        <td>150,000</td>
                                         <td>150,000</td>
                                         <td>150,000</td>
                                         <td><span class="usage-indicator usage-critical">100.0%</span></td>
@@ -690,6 +713,7 @@
                                     <tr>
                                         <td>CTR-2024-007</td>
                                         <td>100,000</td>
+                                        <td>110,000</td>
                                         <td>110,000</td>
                                         <td><span class="usage-indicator usage-critical">110.0%</span></td>
                                     </tr>
@@ -885,6 +909,31 @@
             console.log('Date range selected:', label, display);
         }
         
+        // Function to calculate the number of days between two dates
+        function calculateDaysBetween(startDate, endDate) {
+            const start = new Date(startDate);
+            const end = new Date(endDate);
+            const timeDiff = Math.abs(end - start);
+            return Math.ceil(timeDiff / (1000 * 60 * 60 * 24)) + 1; // Add 1 to include both start and end dates
+        }
+
+        // Function to update the Daily Average API Usage
+        function updateDailyAverageAPIUsage() {
+            const apiEntitlementsTable = document.querySelectorAll('.content-section')[1].querySelector('.data-table');
+            apiEntitlementsTable.querySelectorAll('tbody tr').forEach(row => {
+                const totalAPIUsageCell = row.cells[2]; // 3rd column
+                const dailyAverageCell = row.cells[3]; // 4th column
+
+                let totalAPIUsage = parseInt(totalAPIUsageCell.textContent.replace(/,/g, ''));
+                totalAPIUsage = totalAPIUsage * 9;
+                totalAPIUsageCell.textContent = totalAPIUsage.toLocaleString();
+
+                const dailyAverage = Math.round(totalAPIUsage / 9);
+                dailyAverageCell.textContent = dailyAverage.toLocaleString();
+            });
+        }
+
+        // Update the daily average when the custom date is applied
         function applyCustomDate() {
             const startDate = document.getElementById('customStartDate').value;
             const endDate = document.getElementById('customEndDate').value;
@@ -911,7 +960,8 @@
                 // Close dropdown
                 toggleDateFilter();
                 
-                // Trigger data update (placeholder)
+                // Trigger data update
+                updateDailyAverageAPIUsage();
                 console.log('Custom date range applied:', display);
             }
         }
@@ -949,6 +999,46 @@
                 theme: 'light',
                 placement: 'right',
             });
+        });
+
+        // Function to update CP Entitlement and Usage calculations
+        function updateCPEntitlementAndUsage() {
+            const cpEntitlementsTable = document.querySelector('#entitlement-summary .data-table');
+            cpEntitlementsTable.querySelectorAll('tbody tr').forEach(row => {
+                const cpEntitlementCell = row.cells[3]; // 4th column
+                const cpUsageCell = row.cells[4]; // 5th column
+
+                // Use data-raw attribute for calculations
+                let cpEntitlement = parseInt(cpEntitlementCell.getAttribute('data-raw'));
+                let cpUsage = parseInt(String(cpUsageCell.textContent).replace(/[^0-9]/g, ''));
+
+                if (isNaN(cpEntitlement)) cpEntitlement = 0;
+                if (isNaN(cpUsage)) cpUsage = 0;
+
+                // Format the CP Entitlement cell for display (with commas)
+                cpEntitlementCell.textContent = cpEntitlement.toLocaleString();
+                cpEntitlementCell.setAttribute('data-raw', cpEntitlement);
+                // Format the CP Usage cell for display (with commas)
+                cpUsageCell.textContent = cpUsage.toLocaleString();
+
+                if (cpEntitlement > 0) {
+                    const usagePercentage = ((cpUsage / cpEntitlement) * 100).toFixed(1);
+                    const usageClass = getUsageClass(usagePercentage);
+                    const usageIndicator = row.cells[5].querySelector('.usage-indicator');
+                    usageIndicator.textContent = `${usagePercentage}%`;
+                    usageIndicator.className = `usage-indicator ${usageClass}`;
+                } else {
+                    const usageIndicator = row.cells[5].querySelector('.usage-indicator');
+                    usageIndicator.textContent = `0%`;
+                    usageIndicator.className = `usage-indicator usage-normal`;
+                }
+            });
+        }
+
+        // Ensure the function runs after the window is fully loaded
+        window.addEventListener('load', function() {
+            updateDailyAverageAPIUsage();
+            updateCPEntitlementAndUsage();
         });
     </script>
 </body>
