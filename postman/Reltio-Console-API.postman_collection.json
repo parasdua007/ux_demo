@@ -1,0 +1,445 @@
+{
+	"info": {
+		"_postman_id": "reltio-console-api-collection",
+		"name": "Reltio Console API",
+		"description": "Complete API collection for Reltio Console Usage Reporting and Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "reltio-console"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Get Access Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"if (pm.response.code === 200) {",
+									"    const response = pm.response.json();",
+									"    pm.environment.set('access_token', response.access_token);",
+									"    pm.environment.set('token_expires', new Date().getTime() + (response.expires_in * 1000));",
+									"    console.log('Access token saved successfully');",
+									"} else {",
+									"    console.error('Failed to get access token');",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								},
+								{
+									"key": "client_id",
+									"value": "{{client_id}}",
+									"type": "text"
+								},
+								{
+									"key": "client_secret",
+									"value": "{{client_secret}}",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{base_url}}/oauth/token",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"oauth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Authentication endpoints for Reltio Console API"
+		},
+		{
+			"name": "Usage Reporting",
+			"item": [
+				{
+					"name": "Get Usage Summary",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"// Check if token is expired and refresh if needed",
+									"const tokenExpires = pm.environment.get('token_expires');",
+									"if (tokenExpires && new Date().getTime() > parseInt(tokenExpires)) {",
+									"    console.log('Token expired, refreshing...');",
+									"    pm.sendRequest({",
+									"        url: pm.environment.get('base_url') + '/oauth/token',",
+									"        method: 'POST',",
+									"        header: {",
+									"            'Content-Type': 'application/x-www-form-urlencoded'",
+									"        },",
+									"        body: {",
+									"            mode: 'urlencoded',",
+									"            urlencoded: [",
+									"                { key: 'grant_type', value: 'client_credentials' },",
+									"                { key: 'client_id', value: pm.environment.get('client_id') },",
+									"                { key: 'client_secret', value: pm.environment.get('client_secret') }",
+									"            ]",
+									"        }",
+									"    }, function (err, response) {",
+									"        if (response.code === 200) {",
+									"            const responseJson = response.json();",
+									"            pm.environment.set('access_token', responseJson.access_token);",
+									"            pm.environment.set('token_expires', new Date().getTime() + (responseJson.expires_in * 1000));",
+									"        }",
+									"    });",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has usage data', function () {",
+									"    const response = pm.response.json();",
+									"    pm.expect(response).to.have.property('usage');",
+									"    pm.expect(response.usage).to.be.an('object');",
+									"});",
+									"",
+									"pm.test('Usage data has required fields', function () {",
+									"    const response = pm.response.json();",
+									"    const usage = response.usage;",
+									"    pm.expect(usage).to.have.property('total_entitlements');",
+									"    pm.expect(usage).to.have.property('used_entitlements');",
+									"    pm.expect(usage).to.have.property('percentage_used');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/usage/summary?start_date={{start_date}}&end_date={{end_date}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"usage",
+								"summary"
+							],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "{{start_date}}"
+								},
+								{
+									"key": "end_date",
+									"value": "{{end_date}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Detailed Usage",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has detailed usage data', function () {",
+									"    const response = pm.response.json();",
+									"    pm.expect(response).to.have.property('detailed_usage');",
+									"    pm.expect(response.detailed_usage).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/usage/detailed?start_date={{start_date}}&end_date={{end_date}}&entitlement_type={{entitlement_type}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"usage",
+								"detailed"
+							],
+							"query": [
+								{
+									"key": "start_date",
+									"value": "{{start_date}}"
+								},
+								{
+									"key": "end_date",
+									"value": "{{end_date}}"
+								},
+								{
+									"key": "entitlement_type",
+									"value": "{{entitlement_type}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Usage reporting endpoints for retrieving usage data"
+		},
+		{
+			"name": "Entitlements",
+			"item": [
+				{
+					"name": "Get Entitlements",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Response has entitlements data', function () {",
+									"    const response = pm.response.json();",
+									"    pm.expect(response).to.have.property('entitlements');",
+									"    pm.expect(response.entitlements).to.be.an('array');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url}}/api/v1/entitlements",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"entitlements"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Entitlement",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Entitlement updated successfully', function () {",
+									"    const response = pm.response.json();",
+									"    pm.expect(response).to.have.property('success');",
+									"    pm.expect(response.success).to.be.true;",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"entitlement_id\": \"{{entitlement_id}}\",\n  \"new_limit\": {{new_limit}},\n  \"description\": \"{{description}}\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/entitlements/{{entitlement_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"entitlements",
+								"{{entitlement_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Entitlement management endpoints"
+		},
+		{
+			"name": "Reports",
+			"item": [
+				{
+					"name": "Generate Usage Report",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test('Report generated successfully', function () {",
+									"    const response = pm.response.json();",
+									"    pm.expect(response).to.have.property('report_id');",
+									"    pm.expect(response).to.have.property('download_url');",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer {{access_token}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"report_type\": \"{{report_type}}\",\n  \"start_date\": \"{{start_date}}\",\n  \"end_date\": \"{{end_date}}\",\n  \"format\": \"{{format}}\",\n  \"include_details\": {{include_details}}\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/reports/generate",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"reports",
+								"generate"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "Report generation endpoints"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Global pre-request script for all requests",
+					"console.log('Making request to: ' + pm.request.url);",
+					"console.log('Method: ' + pm.request.method);"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"// Global test script for all requests",
+					"pm.test('Response time is less than 2000ms', function () {",
+					"    pm.expect(pm.response.responseTime).to.be.below(2000);",
+					"});",
+					"",
+					"pm.test('Response has valid JSON', function () {",
+					"    pm.response.to.be.json;",
+					"});"
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "https://api.reltio.com",
+			"type": "string"
+		}
+	]
+}

@@ -1,0 +1,47 @@
+{
+  "usage": {
+    "total_entitlements": 10000,
+    "used_entitlements": 7500,
+    "percentage_used": 75.0,
+    "usage_status": "normal",
+    "period": {
+      "start_date": "2024-01-01",
+      "end_date": "2024-12-31"
+    },
+    "breakdown": {
+      "api_calls": {
+        "total": 5000,
+        "used": 3750,
+        "percentage": 75.0
+      },
+      "data_storage": {
+        "total": 3000,
+        "used": 2250,
+        "percentage": 75.0
+      },
+      "user_seats": {
+        "total": 2000,
+        "used": 1500,
+        "percentage": 75.0
+      }
+    },
+    "trends": {
+      "daily_average": 82.5,
+      "weekly_growth": 2.3,
+      "monthly_growth": 8.7
+    },
+    "alerts": [
+      {
+        "type": "warning",
+        "message": "Usage approaching 80% threshold",
+        "threshold": 80,
+        "current": 75.0
+      }
+    ]
+  },
+  "metadata": {
+    "generated_at": "2024-01-15T10:30:00Z",
+    "version": "1.0",
+    "environment": "development"
+  }
+}

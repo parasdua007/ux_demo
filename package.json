@@ -4,9 +4,17 @@
   "description": "UX Demo for Reltio Console Usage Reporting Interface",
   "main": "final-entitlement-summary.html",
   "scripts": {
+    "test:api": "newman run postman/Reltio-Console-API.postman_collection.json -e postman/environments/Development.postman_environment.json --reporters cli,htmlextra",
+    "test:api:prod": "newman run postman/Reltio-Console-API.postman_collection.json -e postman/environments/Production.postman_environment.json --reporters cli,htmlextra",
+    "test:api:usage": "newman run postman/Reltio-Console-API.postman_collection.json -e postman/environments/Development.postman_environment.json --folder "Usage Reporting" --reporters cli",
+    "postman:setup": "echo "Postman setup complete. Import collection and environments from postman/ directory""
     "start": "http-server -p 8000 -o final-entitlement-summary.html",
     "serve": "http-server -p 8000",
-    "demo": "echo 'Opening Reltio Console UX Demo...' && http-server -p 8000 -o final-entitlement-summary.html"
+    "demo": "echo 'Opening Reltio Console UX Demo...' && http-server -p 8000 -o final-entitlement-summary.html",
+    "test:api": "newman run postman/Reltio-Console-API.postman_collection.json -e postman/environments/Development.postman_environment.json --reporters cli,htmlextra",
+    "test:api:prod": "newman run postman/Reltio-Console-API.postman_collection.json -e postman/environments/Production.postman_environment.json --reporters cli,htmlextra",
+    "test:api:usage": "newman run postman/Reltio-Console-API.postman_collection.json -e postman/environments/Development.postman_environment.json --folder \"Usage Reporting\" --reporters cli",
+    "postman:setup": "echo \"Postman setup complete. Import collection and environments from postman/ directory\""
   },
   "keywords": [
     "ux",

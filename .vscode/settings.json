@@ -1,0 +1,23 @@
+{
+    "rest-client.environmentVariables": {
+        "$shared": {
+            "version": "1.0"
+        },
+        "development": {
+            "base_url": "https://dev-api.reltio.com",
+            "client_id": "your-dev-client-id",
+            "client_secret": "your-dev-client-secret"
+        },
+        "production": {
+            "base_url": "https://api.reltio.com",
+            "client_id": "your-prod-client-id",
+            "client_secret": "your-prod-client-secret"
+        }
+    },
+    "rest-client.defaultHeaders": {
+        "Content-Type": "application/json",
+        "User-Agent": "Reltio-Console-API/1.0"
+    },
+    "thunder-client.collectionsDir": "./postman/collections",
+    "thunder-client.environmentDir": "./postman/environments"
+}

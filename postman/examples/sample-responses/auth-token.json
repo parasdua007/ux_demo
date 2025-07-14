@@ -1,0 +1,7 @@
+{
+  "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbGllbnRfaWQiLCJhdWQiOiJyZWx0aW8tY29uc29sZSIsIm5iZiI6MTY0MDk5NTIwMCwiZXhwIjoxNjQwOTk4ODAwLCJpYXQiOjE2NDA5OTUyMDAsImlzcyI6InJlbHRpby1hdXRoIn0.example_signature",
+  "token_type": "Bearer",
+  "expires_in": 3600,
+  "scope": "usage.read entitlements.read entitlements.write reports.read",
+  "refresh_token": "rt_example_refresh_token_12345"
+}

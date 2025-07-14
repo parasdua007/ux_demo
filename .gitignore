@@ -1,0 +1,4 @@
+# Postman
+postman/environments/.env
+postman/examples/test-data/*.json
+newman-reports/
