@@ -24,7 +24,7 @@ git push origin gh-pages --force
 git checkout main
 
 echo "✅ Deployment complete!"
-echo "🌐 Your site should be available at: https://parasdua007.github.io/ux_demo/"
+echo "🌐 Your site should be available at: file:///Users/parasdua/Documents/updatedux-entitlement.html"
 echo ""
 echo "📋 Next steps:"
 echo "1. Go to https://github.com/parasdua007/ux_demo/settings/pages"
